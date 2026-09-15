@@ -3,12 +3,13 @@ PROJECT := Projet_RPG
 TESTS = tests/
 INC = includes/
 SRC = src/
+IMAGES=images/
 OUT = o/
 BIN = bin/
 INSTALL_DIR = /usr/bin/
 TEST_DIR = $(TESTS)$(SRC)
 
-PROJECT_DIRS = $(SRC) $(INC) $(OUT) $(BIN) $(TEST_DIR)
+PROJECT_DIRS = $(SRC) $(INC) $(IMAGES) $(OUT) $(BIN) $(TEST_DIR)
 
 INCLUDES = -I $(INC) # -I $(INC_RENDER) -I $(TESTS)
 

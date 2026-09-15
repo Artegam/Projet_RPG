@@ -1,0 +1,16 @@
+Voici le liste des actions a mener pour "ESPERER" livrer une toute premiere version.
+
+Tout d'abord penser à être le plus simple possible pour cette première version c'est à dire une démo.
+
+  [ ] Adopter un titre correct pour ce jeu
+  [ ] Mettre au point un carte (pas trop grande) pour l'univers du jeu
+  [ ] Mettre au point une interface graphique (reflechir et faire des tests avec OpenGL en 2D pour commencer)
+  [ ] Mettre au point une image pour le titre de notre jeu (a afficher en premier)
+  [ ] Mettre au point un menu (Nouveau, Sauvegarder, Charger, Quitter, Scores, Hall of fame, etc...)
+  [ ] Mettre au point une image par type de terrain (eau, terre, route, marecages, village, camp de bandits, montagne, grottes, etc...)
+  [ ] Mettre au point une image pour représenter le groupe d'aventuriers
+  [ ] programmer la fiche personnage
+  [ ] Programmer les calculs de jets de dés pour les évenements
+  [ ] Programmer les jés de dés pour les combats
+  [ ] Apprendre à dessiner ???...
+  [ ] Penser à intégrer une piste musicale très "basique"

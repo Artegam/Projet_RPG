@@ -1,0 +1,28 @@
+
+-----------------------------------
+Fiche de personnage
+-----------------------------------
+
+Il s'agit d'un objet qui décrit un personnage, les valeurs vont varier tout au long de l'aventure...
+
+(chaine) Classe du personnage
+(chaine) Ethnie du personnage
+(entier) Points de vie Max
+(entier) Points de vie
+(entier) Attaque
+(entier) Attaque totale (+armes equipees)
+(entier) Defense
+(entier) Defense totale (+armures/objets equipees)
+(entier) Chance
+(objet) Inventaire
+
+-----------------------------------
+
+Dans un premier temps, il nous faudrait 3 a 4 classes de personnages grand max (Barbare, Guerrier, Mage, Archer, Voleur, etc...)
+et 2 ou 3 Ethnie (Humain, Nain, Elfe, ...)
+
+Comment caracteriser les classes de personnages et les ethnies ?? Comment les limiter ? Usage de types d'armes et armures ? dialogues avec les pnj (propositions de phrases ou expressions) ? Accès à certains lieux dans le monde du jeu ???
+
+Pour la classe Mage, doit-on ajouter la caracteristique intelligence ? (a voir pour de futures versions peut-etre)
+
+

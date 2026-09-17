@@ -40,6 +40,12 @@ bool loadBMP(const char* filename, int& width, int& height, std::vector<unsigned
   file.read(reinterpret_cast<char*>(pixels.data()), imageSize);
   file.close();
 
+  //[ASC] reorder the pixels
+  std::vector<unsigned char> tmp = pixels;
+  pixels.clear();
+  for(std::vector<unsigned char>::iterator it = tmp.begin(); it != tmp.end(); it++)
+    pixels.emplace(pixels.begin(), *it);
+
   return true;
 }
 
@@ -58,7 +64,8 @@ void initTexture() {
 
     // /!\ IMPORTANT : Le format BMP stocke les couleurs dans l'ordre Bleu, Vert, Rouge (BGR)
     // Heureusement, OpenGL possède le format natif GL_BGR
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, pixels.data());
+    //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, pixels.data());
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, pixels.data());
 
     std::cout << "Image BMP chargee : " << width << "x" << height << std::endl;
   }

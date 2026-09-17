@@ -41,10 +41,24 @@ bool loadBMP(const char* filename, int& width, int& height, std::vector<unsigned
   file.close();
 
   //[ASC] reorder the pixels
+  std::vector<unsigned char> line;
   std::vector<unsigned char> tmp = pixels;
   pixels.clear();
-  for(std::vector<unsigned char>::iterator it = tmp.begin(); it != tmp.end(); it++)
-    pixels.emplace(pixels.begin(), *it);
+  line.clear();
+
+  for(int i = 0; i <= height; i++) {
+    std::vector<unsigned char>::iterator bol = tmp.begin();
+    std::vector<unsigned char>::iterator eol = tmp.begin();
+    if(i > 0)
+      advance(bol, (i-1)*width*3); // les trois couleurs sont codees sur 24 bits
+    advance(eol, i*width*3);
+    for(std::vector<unsigned char>::iterator it = eol; it != bol; it=it-3) {
+      line.emplace(line.begin(), *it);
+      line.emplace(line.begin(), *(it+1));
+      line.emplace(line.begin(), *(it+2));
+    }
+    pixels.insert(pixels.begin(), line.begin(), line.end());
+  }
 
   return true;
 }

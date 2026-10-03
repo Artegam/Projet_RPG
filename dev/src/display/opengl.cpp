@@ -1,6 +1,7 @@
 #include "display/opengl.h"
 
 GLuint OpenGL::textureID = 0; //[ASC] Initialisation
+
 OpenGL::OpenGL() {
   // Initialisation de FreeGLUT
   //glutInit(&argc, argv);
@@ -30,10 +31,9 @@ void OpenGL::initTexture(std::string filename) {
     // /!\ IMPORTANT : Le format BMP stocke les couleurs dans l'ordre Bleu, Vert, Rouge (BGR)
     // Heureusement, OpenGL possède le format natif GL_BGR
     //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, pixels.data());
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, pixels.data());
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels.data());
 
-    Logger logger;
-    logger << "Image BMP chargee : " << width << "x" << height << "\n";
+    logger << "Image BMP chargee : " << width << "x" << height << eol();
   }
 }
 
@@ -61,7 +61,6 @@ void OpenGL::fct_display() {
 }
 
 void OpenGL::display() {
-
   glutDisplayFunc(OpenGL::fct_display);
   glutMainLoop();
 }

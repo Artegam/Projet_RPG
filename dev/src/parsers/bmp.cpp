@@ -46,6 +46,7 @@ bool image::BMP::load(const char* filename, int& width, int& height, std::vector
       advance(bol, (i-1)*width*3); // les trois couleurs sont codees sur 24 bits
     advance(eol, i*width*3);
     for(std::vector<unsigned char>::iterator it = eol; it != bol; it=it-3) {
+      line.emplace(line.begin(), 0x0); //[ASC] canal Alpha
       line.emplace(line.begin(), *it);
       line.emplace(line.begin(), *(it+1));
       line.emplace(line.begin(), *(it+2));

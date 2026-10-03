@@ -27,3 +27,8 @@ Logger& Logger::operator<<(const int value) {
   console(s);
   return *this;
 }
+
+Logger& Logger::operator<<(eol e) {
+  console(e.value());
+  return *this;
+}

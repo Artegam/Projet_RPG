@@ -11,6 +11,8 @@
 
 class OpenGL {
   private:
+    Logger logger;
+
     static void fct_display();
 
   public:

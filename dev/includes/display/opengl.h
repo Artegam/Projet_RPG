@@ -3,6 +3,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <GL/freeglut.h>
 #include "parsers/bmp.h"
+#include "logger.h"
 
 #include <iostream>
 #include <string>

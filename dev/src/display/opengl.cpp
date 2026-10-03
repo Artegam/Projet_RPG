@@ -32,7 +32,8 @@ void OpenGL::initTexture(std::string filename) {
     //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, pixels.data());
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, pixels.data());
 
-    std::cout << "Image BMP chargee : " << width << "x" << height << std::endl;
+    Logger logger;
+    logger << "Image BMP chargee : " << width << "x" << height << "\n";
   }
 }
 

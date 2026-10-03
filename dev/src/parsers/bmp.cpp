@@ -1,7 +1,7 @@
-#include "ImageParser.h"
+#include "parsers/bmp.h"
 
 // Fonction maison pour charger un fichier BMP 24-bits
-bool imageparser::BMP::load(const char* filename, int& width, int& height, std::vector<unsigned char>& pixels) {
+bool image::BMP::load(const char* filename, int& width, int& height, std::vector<unsigned char>& pixels) {
   std::ifstream file(filename, std::ios::binary);
   if (!file) {
     std::cerr << "Impossible d'ouvrir le fichier BMP : " << filename << std::endl;

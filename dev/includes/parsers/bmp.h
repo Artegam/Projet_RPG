@@ -5,21 +5,46 @@
 #include <fstream>
 #include <vector>
 
+#include <iobyte.h>
+
 namespace image {
   class BMP {
     private:
-//structure head ???
-      short sign; // 2 octets
-      unsigned int filesize;
-      unsigned int dataStart;
-      unsigned int r(const unsigned char* data, unsigned int nboctets, bool little_endian = true);
-      void r(short& result, const unsigned char* data, bool little_endian = true);
-      void r(int& result, const unsigned char* data, bool little_endian = true);
-      void r(unsigned int& result, const unsigned char* data, bool little_endian = true);
-      bool is_little_endian();
+      struct Header;
+      struct Informations;
+
+      Header * header;
+      Informations * infos;
+      std::vector<unsigned char> pixels;
+
     public:
-      bool load(const char* filename, int& width, int& height, std::vector<unsigned char>& pixels);
-      void analyseHeader(const unsigned char* header, int& width, int& height, int& imageSize);
+      BMP();
+      bool load(const char* filename);
+      void analyseHeader(const unsigned char* header);
+      unsigned int width();
+      unsigned int height();
+      const unsigned char * data();
+  };
+
+  struct BMP::Header {
+      short sign;            // 2 octets - equivalent short
+      unsigned int filesize; // 4 octets - equivalent unsigned int
+      unsigned int dataStart;// pointeur vers les données de l'image
+  };
+
+  struct BMP::Informations {
+      unsigned int size;
+      unsigned int width;
+      unsigned int height;
+      unsigned int imageSize;
+      short plans;
+      short color_deep;
+      unsigned int compress_method;
+      unsigned int raw_size;
+      unsigned int h_resolution; //ppm = pixels par metre
+      unsigned int v_resolution; //ppm
+      unsigned int palette_colors;
+      unsigned int important_colors;
   };
 }
 

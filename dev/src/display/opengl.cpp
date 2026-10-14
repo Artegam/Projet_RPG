@@ -15,13 +15,10 @@ OpenGL::OpenGL() {
 }
 
 void OpenGL::initTexture(std::string filename) {
-  int width, height;
-  std::vector<unsigned char> pixels;
-
   // Chargement avec notre propre fonction
   // ATTENTION : Enregistrez votre image au format "BMP 24-bits"
   image::BMP bmp;
-  if (bmp.load(filename.c_str(), width, height, pixels)) {
+  if (bmp.load(filename.c_str())) {
     glGenTextures(1, &textureID);
     glBindTexture(GL_TEXTURE_2D, textureID);
 
@@ -31,9 +28,9 @@ void OpenGL::initTexture(std::string filename) {
     // /!\ IMPORTANT : Le format BMP stocke les couleurs dans l'ordre Bleu, Vert, Rouge (BGR)
     // Heureusement, OpenGL possède le format natif GL_BGR
     //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, pixels.data());
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels.data());
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bmp.width(), bmp.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, bmp.data());
 
-    logger << "Image BMP chargee : " << width << "x" << height << eol();
+    logger << "Image BMP chargee : " << bmp.width() << "x" << bmp.height() << eol();
   }
 }
 

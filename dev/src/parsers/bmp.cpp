@@ -1,52 +1,33 @@
 #include "parsers/bmp.h"
 
-
-//[ASC] operations sur 4 octets donc 32 bits
-unsigned int image::BMP::r(const unsigned char* data, unsigned int nboctets, bool little_endian) {
-  //initialisation
-  unsigned int res = 0x00000000; // 4 octets
-
-  for (int idx = nboctets-1; idx>=0; idx--)
-    (little_endian) ? res |= data[idx] << 8*idx : res |= data[nboctets-1-idx] << 8*idx;
-
-  return res;
+image::BMP::BMP() {
+  header = new Header();
+  infos = new Informations();
+  infos->imageSize = 0;
 }
 
-void image::BMP::r(short& result, const unsigned char* data, bool little_endian) { result = r(data, 2, little_endian); }
-void image::BMP::r(int& result, const unsigned char* data, bool little_endian) { result = r(data, 4, little_endian); }
-void image::BMP::r(unsigned int& result, const unsigned char* data, bool little_endian) { result = r(data, 4, little_endian); }
-
-bool image::BMP::is_little_endian() {
-  unsigned int num = 1;
-  // On convertit l'adresse de l'entier en pointeur sur char (1 octet)
-  char* c = (char*)&num;
-  // Si le premier octet vaut 1, c'est du little-endian
-  return (*c == 1);
-}
-
-void image::BMP::analyseHeader(const unsigned char* header, int& width, int& height, int& imageSize) {
-  r(sign, &header[0], false);
-  //sign = (header[0] << 8) | header[1]; //ordre standart
+void image::BMP::analyseHeader(const unsigned char* _start) {
+  header->sign = iobyte::mem::read<short>(&_start[0], false);
 
   // Extraire la largeur, la hauteur et la taille des données depuis l'en-tête
-  r(filesize, &header[2]);
-  r(dataStart, &header[10]);
-  r(width, &header[18]);
-  r(height, &header[22]);
-  r(imageSize, &header[34]);
+  header->filesize = iobyte::mem::read<unsigned int>(&_start[2]);
+  header->dataStart = iobyte::mem::read<unsigned int>(&_start[10]);
+  infos->width = iobyte::mem::read<unsigned int>(&_start[18]);
+  infos->height = iobyte::mem::read<unsigned int>(&_start[22]);
+  infos->imageSize = iobyte::mem::read<unsigned int>(&_start[34]);
 
-  printf("sign: %x\n", sign);
-  printf("filesize: %d octets\n", filesize);
-  printf("data start pointer: %.4x\n", dataStart);
-  printf("width: %x\n", width);
-  printf("height: %x\n", height);
+  printf("sign: %x\n", header->sign);
+  printf("filesize: %d octets\n", header->filesize);
+  printf("data start pointer: %.4x\n", header->dataStart);
+  printf("width: %x\n", infos->width);
+  printf("height: %x\n", infos->height);
 
   // Si la taille de l'image n'est pas spécifiée, on la calcule
-  if (imageSize == 0) imageSize = width * height * 3;
+  if (infos->imageSize == 0) infos->imageSize = infos->width * infos->height * 3;
 }
 
 // Fonction maison pour charger un fichier BMP 24-bits
-bool image::BMP::load(const char* filename, int& width, int& height, std::vector<unsigned char>& pixels) {
+bool image::BMP::load(const char* filename) {
   std::ifstream file(filename, std::ios::binary);
   if (!file) {
     std::cerr << "Impossible d'ouvrir le fichier BMP : " << filename << std::endl;
@@ -54,22 +35,21 @@ bool image::BMP::load(const char* filename, int& width, int& height, std::vector
   }
 
   // Lire l'en-tête du fichier (54 octets)
-  int imageSize = 0;
-  unsigned char header[54];
+  unsigned char data_header[54];
 
-  file.read(reinterpret_cast<char*>(header), 54);
-  analyseHeader(header, width, height, imageSize);
+  file.read(reinterpret_cast<char*>(data_header), 54);
+  analyseHeader(data_header);
   // Vérifier la signature "BM"
-  if (sign != 0x424D) {
+  if (header->sign != 0x424D) {
     std::cerr << "Ce n'est pas un fichier BMP valide." << std::endl;
     return false;
   }
 
   // Allouer le vecteur pour stocker les pixels
-  pixels.resize(imageSize);
+  pixels.resize(infos->imageSize);
 
   // Lire les pixels bruts du fichier
-  file.read(reinterpret_cast<char*>(pixels.data()), imageSize);
+  file.read(reinterpret_cast<char*>(pixels.data()), infos->imageSize);
   file.close();
 
   //[ASC] reorder the pixels
@@ -78,12 +58,12 @@ bool image::BMP::load(const char* filename, int& width, int& height, std::vector
   pixels.clear();
   line.clear();
 
-  for(int i = 0; i <= height; i++) {
+  for(unsigned int i = 0; i <= infos->height; i++) {
     std::vector<unsigned char>::iterator bol = tmp.begin();
     std::vector<unsigned char>::iterator eol = tmp.begin();
     if(i > 0)
-      advance(bol, (i-1)*width*3); // les trois couleurs sont codees sur 24 bits
-    advance(eol, i*width*3);
+      advance(bol, (i-1)*infos->width*3); // les trois couleurs sont codees sur 24 bits
+    advance(eol, i*infos->width*3);
     for(std::vector<unsigned char>::iterator it = eol; it != bol; it=it-3) {
       line.emplace(line.begin(), 0x0); //[ASC] canal Alpha
       line.emplace(line.begin(), *it);
@@ -96,3 +76,6 @@ bool image::BMP::load(const char* filename, int& width, int& height, std::vector
   return true;
 }
 
+unsigned int image::BMP::width() {return infos->width;}
+unsigned int image::BMP::height() {return infos->height;}
+const unsigned char * image::BMP::data() {return pixels.data();}

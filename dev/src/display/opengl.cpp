@@ -17,7 +17,7 @@ OpenGL::OpenGL() {
 void OpenGL::initTexture(std::string filename) {
   // Chargement avec notre propre fonction
   // ATTENTION : Enregistrez votre image au format "BMP 24-bits"
-  image::BMP bmp;
+  formats::BMP bmp;
   if (bmp.load(filename.c_str())) {
     glGenTextures(1, &textureID);
     glBindTexture(GL_TEXTURE_2D, textureID);
